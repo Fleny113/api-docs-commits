@@ -58,6 +58,9 @@ export async function sendCommitMessage(commit: Commit, pr?: AssociatedPr) {
                 ]
             }
         ],
+        allowedMentions: {
+            parse: [],
+        },
         flags: MessageFlags.IsComponentV2,
     });
 }
