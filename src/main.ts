@@ -2,8 +2,8 @@ import { schedule } from "node-cron"
 import { getLastCommits } from "./cron.ts";
 import { bot } from "./discord.ts";
 
-// Schedule the task to run every 3 hours
-const task = schedule("0 */3 * * *", async () => {
+// Schedule the task to run every 6 hours
+const task = schedule("0 */6 * * *", async () => {
     try {
         await getLastCommits();
     } catch (error) {
