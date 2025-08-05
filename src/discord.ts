@@ -11,9 +11,10 @@ export async function sendCommitMessage(commit: Commit, pr?: AssociatedPr) {
     const [commitMessage, ...commitDetails] = commit.commit.message.split('\n');
 
     const title = pr?.title || commitMessage;
-    const details = pr?.body || commitDetails.join('\n') || '';
+    const details = pr?.body?.trim() || commitDetails.join('\n').trim() || "*No description provided.*";
 
     assert(title, "PR or commit title should exist");
+    const truncatedDetails = details.length > 2000 ? `${details.slice(0, 2000)}...` : details;
 
     const actionRow: ActionRow = {
         type: MessageComponentTypes.ActionRow,
@@ -51,11 +52,11 @@ export async function sendCommitMessage(commit: Commit, pr?: AssociatedPr) {
                     },
                     {
                         type: MessageComponentTypes.TextDisplay,
-                        content: details.trim() || "*No description provided.*"
+                        content: truncatedDetails
                     },
                     actionRow
                 ]
-        }
+            }
         ],
         flags: MessageFlags.IsComponentV2,
     });
