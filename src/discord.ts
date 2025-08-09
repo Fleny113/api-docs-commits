@@ -1,13 +1,13 @@
 import { ButtonStyles, createBot, MessageComponentTypes, MessageFlags, type ActionRow } from "@discordeno/bot";
 import { DISCORD_CHANNEL_ID, DISCORD_TOKEN } from "./env.ts";
-import type { AssociatedPr, Commit } from "./github.ts";
+import type { AssociatedPr, Commit, Issue } from "./github.ts";
 import assert from "node:assert";
 
 export const bot = createBot({
   token: DISCORD_TOKEN,
 });
 
-export async function sendCommitMessage(commit: Commit, pr?: AssociatedPr) {
+export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?: AssociatedPr) {
     const [commitMessage, ...commitDetails] = commit.commit.message.split('\n');
 
     const title = pr?.title || commitMessage;
@@ -54,7 +54,18 @@ export async function sendCommitMessage(commit: Commit, pr?: AssociatedPr) {
                         type: MessageComponentTypes.TextDisplay,
                         content: truncatedDetails
                     },
-                    actionRow
+                    actionRow,
+                    {
+                        type: MessageComponentTypes.ActionRow,
+                        components: [
+                            {
+                                type: MessageComponentTypes.Button,
+                                style: ButtonStyles.Link,
+                                label: "View created Issue",
+                                url: createdIssue.html_url
+                            }
+                        ]
+                    }
                 ]
             }
         ],

@@ -14,6 +14,9 @@ importers:
       '@octokit/plugin-rest-endpoint-methods':
         specifier: ^16.0.0
         version: 16.0.0(@octokit/core@7.0.3)
+      dedent:
+        specifier: ^1.6.0
+        version: 1.6.0
       node-cron:
         specifier: ^4.2.1
         version: 4.2.1
@@ -163,6 +166,14 @@ packages:
 
   bottleneck@2.19.5:
     resolution: {integrity: sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==}
+
+  dedent@1.6.0:
+    resolution: {integrity: sha512-F1Z+5UCFpmQUzJa11agbyPVMbpgT/qA3/SKyJ1jyBgm7dUcUEa8v9JwDkerSQXfakBwFljIxhOJqGkjUwZ9FSA==}
+    peerDependencies:
+      babel-plugin-macros: ^3.1.0
+    peerDependenciesMeta:
+      babel-plugin-macros:
+        optional: true
 
   fast-content-type-parse@3.0.0:
     resolution: {integrity: sha512-ZvLdcY8P+N8mGQJahJV5G4U88CSvT1rP8ApL6uETe88MBXrBHAkZlSEySdUlyztF7ccb+Znos3TFqaepHxdhBg==}
@@ -398,6 +409,8 @@ snapshots:
   before-after-hook@4.0.0: {}
 
   bottleneck@2.19.5: {}
+
+  dedent@1.6.0: {}
 
   fast-content-type-parse@3.0.0: {}
 

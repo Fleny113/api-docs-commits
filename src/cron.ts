@@ -1,6 +1,6 @@
 import assert from "node:assert";
 import { readFile, writeFile } from "node:fs/promises";
-import { octokit } from "./github.ts";
+import { createCommitIssue, octokit } from "./github.ts";
 import { bot, sendCommitMessage } from "./discord.ts";
 
 export async function getLastCommits() {
@@ -46,9 +46,11 @@ export async function getLastCommits() {
             commit_sha: commit.sha,
         })
 
-        await sendCommitMessage(commit, associatedPrs[0]);
-    }
+        const pr = associatedPrs[0];
 
+        const createdIssue = await createCommitIssue(commit, pr);
+        await sendCommitMessage(commit, createdIssue, pr);
+    }
 
     const newestCommitSha = commitsToProcess.at(-1)?.sha
     assert(newestCommitSha, "Newest commit SHA should exist");
