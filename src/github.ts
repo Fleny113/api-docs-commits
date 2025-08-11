@@ -1,7 +1,8 @@
+import assert from "node:assert";
 import type { RestEndpointMethodTypes } from "@octokit/plugin-rest-endpoint-methods";
 import dedent from "dedent";
 import { Octokit } from "octokit";
-import { GITHUB_TOKEN } from "./env.ts";
+import { GITHUB_ISSUE_REPO, GITHUB_TOKEN } from "./env.ts";
 
 export const octokit = new Octokit({
     auth: GITHUB_TOKEN,
@@ -27,9 +28,13 @@ export async function createCommitIssue(commit: Commit, pr?: AssociatedPr): Prom
   ###### This is a bot generated issue
   `;
 
+    const [owner, repo] = GITHUB_ISSUE_REPO.split("/", 2);
+    assert(owner, "The owner of the repo should exist");
+    assert(repo, "The repo name should exist");
+
     const { data: issue } = await octokit.rest.issues.create({
-        owner: "discordeno",
-        repo: "discordeno",
+        owner,
+        repo,
         title: `[api-docs] ${issueName}`,
         body: issueBody,
         labels: ["api-docs-commits"],
