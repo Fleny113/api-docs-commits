@@ -1,7 +1,8 @@
 import assert from "node:assert";
 import { readFile, writeFile } from "node:fs/promises";
-import { bot, sendCommitMessage } from "./discord.ts";
+import { sendCommitMessage } from "./discord.ts";
 import { createCommitIssue, octokit } from "./github.ts";
+import { logger } from "./logger.ts";
 
 export async function getLastCommits() {
     const lastKnownCommitSha = (await readFile("commit.txt", "utf-8")).trim();
@@ -10,7 +11,7 @@ export async function getLastCommits() {
         throw new Error("Last known commit SHA is empty. Please ensure commit.txt contains a valid SHA.");
     }
 
-    bot.logger.info(`Fetching commits since last known commit SHA: ${lastKnownCommitSha}`);
+    logger.info(`Fetching commits since last known commit SHA: ${lastKnownCommitSha}`);
 
     const { data: lastKnownCommit } = await octokit.rest.repos.getCommit({
         owner: "discord",
@@ -33,11 +34,11 @@ export async function getLastCommits() {
     const commitsToProcess = commits.slice(0, lastKnownCommitIndex);
 
     if (commitsToProcess.length === 0) {
-        bot.logger.info("No new commits found since the last known commit.");
+        logger.info("No new commits found since the last known commit.");
         return;
     }
 
-    bot.logger.info(`Found ${commitsToProcess.length} new commits since last known commit.`);
+    logger.info(`Found ${commitsToProcess.length} new commits since last known commit.`);
 
     for (const commit of commitsToProcess.reverse()) {
         const { data: associatedPrs } = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
@@ -56,5 +57,5 @@ export async function getLastCommits() {
     assert(newestCommitSha, "Newest commit SHA should exist");
 
     await writeFile("commit.txt", newestCommitSha, "utf-8");
-    bot.logger.info(`Updated last known commit SHA to ${newestCommitSha}`);
+    logger.info(`Updated last known commit SHA to ${newestCommitSha}`);
 }

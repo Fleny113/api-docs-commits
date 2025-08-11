@@ -2,9 +2,13 @@ import assert from "node:assert";
 import { type ActionRow, ButtonStyles, createBot, MessageComponentTypes, MessageFlags } from "@discordeno/bot";
 import { DISCORD_CHANNEL_ID, DISCORD_TOKEN } from "./env.ts";
 import type { AssociatedPr, Commit, Issue } from "./github.ts";
+import { createLogger, LogLevel } from "./logger.ts";
 
 export const bot = createBot({
     token: DISCORD_TOKEN,
+    loggerFactory: () => {
+        return createLogger("Discordeno", LogLevel.Info);
+    },
 });
 
 export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?: AssociatedPr) {
