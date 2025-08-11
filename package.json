@@ -15,6 +15,7 @@
     "octokit": "^5.0.3"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.4",
     "@types/node": "^24.1.0",
     "typescript": "^5.9.2"
   }

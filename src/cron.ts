@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { readFile, writeFile } from "node:fs/promises";
-import { createCommitIssue, octokit } from "./github.ts";
 import { bot, sendCommitMessage } from "./discord.ts";
+import { createCommitIssue, octokit } from "./github.ts";
 
 export async function getLastCommits() {
     const lastKnownCommitSha = (await readFile("commit.txt", "utf-8")).trim();
@@ -13,8 +13,8 @@ export async function getLastCommits() {
     bot.logger.info(`Fetching commits since last known commit SHA: ${lastKnownCommitSha}`);
 
     const { data: lastKnownCommit } = await octokit.rest.repos.getCommit({
-        owner: 'discord',
-        repo: 'discord-api-docs',
+        owner: "discord",
+        repo: "discord-api-docs",
         ref: lastKnownCommitSha,
     });
 
@@ -22,10 +22,10 @@ export async function getLastCommits() {
     assert(lastKnownCommitDate, "Last known commit date should exist");
 
     const commits = await octokit.paginate("GET /repos/{owner}/{repo}/commits", {
-        owner: 'discord',
-        repo: 'discord-api-docs',
+        owner: "discord",
+        repo: "discord-api-docs",
         since: lastKnownCommitDate,
-    })
+    });
 
     const lastKnownCommitIndex = commits.findIndex(commit => commit.sha === lastKnownCommitSha);
     assert(lastKnownCommitIndex >= 0, "Last known commit should exist in the commits list");
@@ -41,10 +41,10 @@ export async function getLastCommits() {
 
     for (const commit of commitsToProcess.reverse()) {
         const { data: associatedPrs } = await octokit.rest.repos.listPullRequestsAssociatedWithCommit({
-            owner: 'discord',
-            repo: 'discord-api-docs',
+            owner: "discord",
+            repo: "discord-api-docs",
             commit_sha: commit.sha,
-        })
+        });
 
         const pr = associatedPrs[0];
 
@@ -52,7 +52,7 @@ export async function getLastCommits() {
         await sendCommitMessage(commit, createdIssue, pr);
     }
 
-    const newestCommitSha = commitsToProcess.at(-1)?.sha
+    const newestCommitSha = commitsToProcess.at(-1)?.sha;
     assert(newestCommitSha, "Newest commit SHA should exist");
 
     await writeFile("commit.txt", newestCommitSha, "utf-8");

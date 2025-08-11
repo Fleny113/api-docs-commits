@@ -1,17 +1,17 @@
-import { ButtonStyles, createBot, MessageComponentTypes, MessageFlags, type ActionRow } from "@discordeno/bot";
+import assert from "node:assert";
+import { type ActionRow, ButtonStyles, createBot, MessageComponentTypes, MessageFlags } from "@discordeno/bot";
 import { DISCORD_CHANNEL_ID, DISCORD_TOKEN } from "./env.ts";
 import type { AssociatedPr, Commit, Issue } from "./github.ts";
-import assert from "node:assert";
 
 export const bot = createBot({
-  token: DISCORD_TOKEN,
+    token: DISCORD_TOKEN,
 });
 
 export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?: AssociatedPr) {
-    const [commitMessage, ...commitDetails] = commit.commit.message.split('\n');
+    const [commitMessage, ...commitDetails] = commit.commit.message.split("\n");
 
     const title = pr?.title || commitMessage;
-    const details = pr?.body?.trim() || commitDetails.join('\n').trim() || "*No description provided.*";
+    const details = pr?.body?.trim() || commitDetails.join("\n").trim() || "*No description provided.*";
 
     assert(title, "PR or commit title should exist");
     const truncatedDetails = details.length > 2000 ? `${details.slice(0, 2000)}...` : details;
@@ -23,9 +23,9 @@ export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?
                 type: MessageComponentTypes.Button,
                 style: ButtonStyles.Link,
                 label: "Commit",
-                url: commit.html_url
+                url: commit.html_url,
             },
-        ]
+        ],
     };
 
     if (pr) {
@@ -33,7 +33,7 @@ export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?
             type: MessageComponentTypes.Button,
             style: ButtonStyles.Link,
             label: "Pull Request",
-            url: pr?.html_url
+            url: pr?.html_url,
         });
     }
 
@@ -44,15 +44,15 @@ export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?
                 components: [
                     {
                         type: MessageComponentTypes.TextDisplay,
-                        content: "## New Discord Api Docs commit"
+                        content: "## New Discord Api Docs commit",
                     },
                     {
                         type: MessageComponentTypes.TextDisplay,
-                        content: `### ${title.trim()}`
+                        content: `### ${title.trim()}`,
                     },
                     {
                         type: MessageComponentTypes.TextDisplay,
-                        content: truncatedDetails
+                        content: truncatedDetails,
                     },
                     actionRow,
                     {
@@ -62,12 +62,12 @@ export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?
                                 type: MessageComponentTypes.Button,
                                 style: ButtonStyles.Link,
                                 label: "View created Issue",
-                                url: createdIssue.html_url
-                            }
-                        ]
-                    }
-                ]
-            }
+                                url: createdIssue.html_url,
+                            },
+                        ],
+                    },
+                ],
+            },
         ],
         allowedMentions: {
             parse: [],
