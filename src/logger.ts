@@ -26,13 +26,19 @@ export function createLogger(name: string, logLevel: LogLevel) {
         if (typeof args[0] !== "string") args[0] = inspect(args[0], { colors: true });
 
         const date = new Date();
+        const year = date.getUTCFullYear();
+        const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+        const day = date.getUTCDate().toString().padStart(2, "0");
+        const hours = date.getUTCHours().toString().padStart(2, "0");
+        const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+        const seconds = date.getUTCSeconds().toString().padStart(2, "0");
+
         // You either construct the date string manually or rely on a random locale to have the format you want.
-        const localizedDate = `${date.getUTCFullYear()}-${(date.getUTCMonth() + 1).toString().padStart(2, "0")}-${date.getUTCDate().toString().padStart(2, "0")}`;
-        const localizedTime = date.toLocaleTimeString("UTC", { timeZone: "UTC" });
+        const timestamp = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
         const prefix = prefixes.get(level) ?? pc.white(pc.bgBlack("UNK"));
 
-        const dateAndTime = pc.greenBright(pc.bold(`[${localizedDate} ${localizedTime}]`));
+        const dateAndTime = pc.greenBright(pc.bold(`[${timestamp}]`));
         const message = `${dateAndTime} ${prefix} ${name} ${pc.black(">")} ${args[0]}`;
 
         switch (level) {
