@@ -1,7 +1,7 @@
 import assert from "node:assert";
 import { readFile, writeFile } from "node:fs/promises";
 import { sendCommitMessage } from "./discord.ts";
-import { createCommitIssue, octokit } from "./github.ts";
+import { type Commit, createCommitIssue, octokit } from "./github.ts";
 import { logger } from "./logger.ts";
 
 export async function getLastCommits() {
@@ -49,7 +49,9 @@ export async function getLastCommits() {
 
         const pr = associatedPrs[0];
 
-        const createdIssue = await createCommitIssue(commit, pr);
+        const shouldCreateIssue = !isFilteredCommit(commit);
+
+        const createdIssue = shouldCreateIssue ? await createCommitIssue(commit, pr) : null;
         await sendCommitMessage(commit, createdIssue, pr);
     }
 
@@ -58,4 +60,8 @@ export async function getLastCommits() {
 
     await writeFile("commit.txt", newestCommitSha, "utf-8");
     logger.info(`Updated last known commit SHA to ${newestCommitSha}`);
+}
+
+function isFilteredCommit(commit: Commit): boolean {
+    return commit.commit.author?.name === "dependabot[bot]";
 }

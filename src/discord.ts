@@ -11,7 +11,7 @@ export const bot = createBot({
     },
 });
 
-export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?: AssociatedPr) {
+export async function sendCommitMessage(commit: Commit, createdIssue: Issue | null, pr?: AssociatedPr) {
     const [commitMessage, ...commitDetails] = commit.commit.message.split("\n");
 
     const title = pr?.title || commitMessage;
@@ -59,17 +59,22 @@ export async function sendCommitMessage(commit: Commit, createdIssue: Issue, pr?
                         content: truncatedDetails,
                     },
                     actionRow,
-                    {
-                        type: MessageComponentTypes.ActionRow,
-                        components: [
-                            {
-                                type: MessageComponentTypes.Button,
-                                style: ButtonStyles.Link,
-                                label: "View created Issue",
-                                url: createdIssue.html_url,
-                            },
-                        ],
-                    },
+                    createdIssue
+                        ? {
+                              type: MessageComponentTypes.ActionRow,
+                              components: [
+                                  {
+                                      type: MessageComponentTypes.Button,
+                                      style: ButtonStyles.Link,
+                                      label: "View created Issue",
+                                      url: createdIssue.html_url,
+                                  },
+                              ],
+                          }
+                        : {
+                              type: MessageComponentTypes.TextDisplay,
+                              content: "-# No issue was created as it was filtered out as auto-generated",
+                          },
                 ],
             },
         ],
