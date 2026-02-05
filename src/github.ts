@@ -44,8 +44,11 @@ export async function createCommitIssue(commit: Commit, pr?: AssociatedPr): Prom
 }
 
 function sanitizeBody(body: string): string {
-    // Replace mentions with code formatting, to avoid mentioning users
-    return body.replace(/@([\w]+)/, "[`@$1`](https://github.com/$1)");
+    return body
+        // Replace mentions with code formatting, to avoid mentioning users
+        .replace(/@([\w]+)/, "[`@$1`](https://github.com/$1)")
+        // Use redirect.github.com to avoid spamming the original links with references
+        .replace("https://github.com/", "https://redirect.github.com/");
 }
 
 function useRedirectGithub(link: string): string {
