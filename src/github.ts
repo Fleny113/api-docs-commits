@@ -27,6 +27,28 @@ export const octokit = new Octokit({
     request: {
         log: createLogger("@octokit/request", LogLevel.Info),
     },
+    // @octokit/throttling options
+    throttle: {
+        // default config from the octokit package
+        onRateLimit: (retryAfter, options, octokit) => {
+            octokit.log.warn(`Request quota exhausted for request ${options.method} ${options.url}`);
+
+            if (options.request.retryCount === 0) {
+                // only retries once
+                octokit.log.info(`Retrying after ${retryAfter} seconds!`);
+                return true;
+            }
+        },
+        onSecondaryRateLimit: (retryAfter, options, octokit) => {
+            octokit.log.warn(`SecondaryRateLimit detected for request ${options.method} ${options.url}`);
+
+            if (options.request.retryCount === 0) {
+                // only retries once
+                octokit.log.info(`Retrying after ${retryAfter} seconds!`);
+                return true;
+            }
+        },
+    },
 });
 
 export async function createCommitIssue(commit: Commit, pr?: AssociatedPr): Promise<Issue> {
