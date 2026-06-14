@@ -19,6 +19,8 @@
         "noUncheckedSideEffectImports": true,
         "moduleDetection": "force",
         "skipLibCheck": true,
+        // Nodejs
+        "types": ["node"],
         // Run TypeScript in Node.js
         "noEmit": true,
         "allowImportingTsExtensions": true

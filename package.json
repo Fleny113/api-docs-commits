@@ -3,21 +3,23 @@
   "version": "0.0.0",
   "main": "src/main.ts",
   "type": "module",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@11.6.0",
   "scripts": {
     "start": "node --env-file=.env src/main.ts"
   },
   "dependencies": {
-    "@discordeno/bot": "21.0.1-next.068ecf8",
-    "@octokit/plugin-rest-endpoint-methods": "^16.0.0",
-    "dedent": "^1.6.0",
+    "@discordeno/bot": "22.0.1-next.c274a26",
+    "@octokit/plugin-rest-endpoint-methods": "^17.0.0",
+    "@octokit/plugin-retry": "^8.1.0",
+    "@octokit/plugin-throttling": "^11.0.3",
+    "@octokit/rest": "^22.0.1",
+    "dedent": "^1.7.2",
     "node-cron": "^4.2.1",
-    "octokit": "^5.0.3",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.4",
-    "@types/node": "^24.1.0",
-    "typescript": "^5.9.2"
+    "@biomejs/biome": "2.5.0",
+    "@types/node": "^25.9.3",
+    "typescript": "^6.0.3"
   }
 }

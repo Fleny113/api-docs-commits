@@ -1,14 +1,12 @@
 import assert from "node:assert";
-import { type ActionRow, ButtonStyles, createBot, MessageComponentTypes, MessageFlags } from "@discordeno/bot";
+import { type ActionRow, ButtonStyles, createRestManager, MessageComponentTypes, MessageFlags } from "@discordeno/bot";
 import { DISCORD_CHANNEL_ID, DISCORD_TOKEN } from "./env.ts";
 import type { AssociatedPr, Commit, Issue } from "./github.ts";
 import { createLogger, LogLevel } from "./logger.ts";
 
-export const bot = createBot({
+export const ddRest = createRestManager({
     token: DISCORD_TOKEN,
-    loggerFactory: () => {
-        return createLogger("Discordeno", LogLevel.Info);
-    },
+    logger: createLogger("Discordeno", LogLevel.Info),
 });
 
 export async function sendCommitMessage(commit: Commit, createdIssue: Issue | null, pr?: AssociatedPr) {
@@ -41,7 +39,7 @@ export async function sendCommitMessage(commit: Commit, createdIssue: Issue | nu
         });
     }
 
-    await bot.rest.sendMessage(DISCORD_CHANNEL_ID, {
+    await ddRest.sendMessage(DISCORD_CHANNEL_ID, {
         components: [
             {
                 type: MessageComponentTypes.Container,
@@ -81,6 +79,6 @@ export async function sendCommitMessage(commit: Commit, createdIssue: Issue | nu
         allowedMentions: {
             parse: [],
         },
-        flags: MessageFlags.IsComponentV2,
+        flags: MessageFlags.IsComponentsV2,
     });
 }
