@@ -59,16 +59,16 @@ export async function createCommitIssue(commit: Commit, pr?: AssociatedPr): Prom
         ? dedent`
             A new pull request has been merged in the discord/discord-api-docs repo: [${pr.title} #${pr.number}](${useRedirectGithub(pr.html_url)})
 
-            ${sanitizeBody(pr.body ?? "")}
+            ${sanitizeBody(pr.body ?? "").trim()}
 
-            ###### This is a bot generated issue
+            <sub>This is a bot generated issue</sub>
             `
         : dedent`
             A new commit has been made in the discord/discord-api-docs repo: [${commitTitle} @\`${commit.sha.slice(0, 7)}\`](${commit.html_url})
 
-            ${sanitizeBody(commitDetails.join("\n"))}
+            ${sanitizeBody(commitDetails.join("\n").trim())}
 
-            ###### This is a bot generated issue
+            <sub>This is a bot generated issue</sub>
             `;
 
     const [owner, repo] = GITHUB_ISSUE_REPO.split("/", 2);
