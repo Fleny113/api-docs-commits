@@ -23,6 +23,7 @@
         "types": ["node"],
         // Run TypeScript in Node.js
         "noEmit": true,
+        "erasableSyntaxOnly": true,
         "allowImportingTsExtensions": true
     }
 }

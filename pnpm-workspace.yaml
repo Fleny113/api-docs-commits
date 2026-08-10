@@ -1,0 +1,6 @@
+minimumReleaseAgeExclude:
+  - '@discordeno/bot@22.0.1-next.f8834c0'
+  - '@discordeno/gateway@22.0.1-next.f8834c0'
+  - '@discordeno/rest@22.0.1-next.f8834c0'
+  - '@discordeno/types@22.0.1-next.f8834c0'
+  - '@discordeno/utils@22.0.1-next.f8834c0'
