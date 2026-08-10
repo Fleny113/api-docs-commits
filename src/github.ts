@@ -38,6 +38,8 @@ export const octokit = new Octokit({
                 octokit.log.info(`Retrying after ${retryAfter} seconds!`);
                 return true;
             }
+
+            return undefined;
         },
         onSecondaryRateLimit: (retryAfter, options, octokit) => {
             octokit.log.warn(`SecondaryRateLimit detected for request ${options.method} ${options.url}`);
@@ -47,6 +49,8 @@ export const octokit = new Octokit({
                 octokit.log.info(`Retrying after ${retryAfter} seconds!`);
                 return true;
             }
+
+            return undefined;
         },
     },
 });
