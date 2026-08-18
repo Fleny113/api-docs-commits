@@ -53,6 +53,8 @@ export async function getLastCommits() {
 
         const createdIssue = shouldCreateIssue ? await createCommitIssue(commit, pr) : null;
         await sendCommitMessage(commit, createdIssue, pr);
+
+        logger.info(`Processed commit ${commit.sha}: ${createdIssue ? `Created issue #${createdIssue.id}` : "Filtered out"}`);
     }
 
     const newestCommitSha = commitsToProcess.at(-1)?.sha;

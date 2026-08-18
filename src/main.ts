@@ -1,6 +1,6 @@
 import { schedule } from "node-cron";
 import { getLastCommits } from "./cron.ts";
-import { logger } from "./logger.ts";
+import { createLogger, logger, LogLevel } from "./logger.ts";
 
 // Schedule the task to run every 6 hours
 const task = schedule(
@@ -15,6 +15,7 @@ const task = schedule(
     {
         timezone: "UTC",
         noOverlap: true,
+        logger: createLogger("node-cron", LogLevel.Info),
     },
 );
 
